@@ -13,6 +13,12 @@
 const int DEFAULT_PORTNUM = 3;
 const int DEFAULT_BAUDNUM = 1;
 
+// INTERNAL SUBROUTINES (private): ******************************************************************
+
+/**
+ * @brief createDictionary : Generates a dictionary that maps control table parameter name (key) to control table memory address(value)
+ * @return
+ */
 QMap<QString, int> createDictionary(void){
 
     QMap<QString, int> controlTableDictionary;
@@ -62,18 +68,31 @@ QMap<QString, int> createDictionary(void){
     controlTableDictionary["punch(h)"] = 49;
 
     return controlTableDictionary;
-
 }
 
+
+/**
+ * @brief createSingleByteAddresses : QList containing Dynamixel memory addresses that are single byte. Used to avoid overwriting (writing a word to single byte address)
+ * @return
+ */
 QList<int> createSingleByteAddresses(void){
     QList<int> singleByteAddresses;
     return singleByteAddresses << 2 << 3 << 4 << 5 << 11 << 12 << 13 << 16 << 17 << 18 << 24 << 25 << 26 << 27 << 28 << 29 << 42 << 43 << 44 << 46 << 47;
 }
 
+/**
+ * @brief controlTableDictionary : Dictionary that maps control table name (key) to control table memory address (value)
+ */
 QMap<QString, int> controlTableDictionary = createDictionary();
+/**
+ * @brief singleByteAddresses : List containing Dynamixel memory addresses that are single byte. Used to avoid overwriting (writing a word to single byte address)
+ */
 QList<int> singleByteAddresses = createSingleByteAddresses();
 
 
+
+
+// CONTROL TABLE SUBROUTINES: ******************************************************************
 
 /**
 * Attempts to initialize the communication devices
@@ -82,6 +101,7 @@ QList<int> singleByteAddresses = createSingleByteAddresses();
 int DynamixelControl::initialize(void){
     return dxl_initialize(2,1);
 }
+
 
 /**
  * Terminates the communication devices
@@ -571,7 +591,6 @@ int DynamixelControl::getCWComplianceSlope(int id){
     return readFromDxl(id, controlTableDictionary["cw compliance slope"]);
 }
 
-
 /**
 * Sets the CW Compliance Slope
 * Sets the level of torque near the goal position.
@@ -840,7 +859,7 @@ void DynamixelControl::setPunch(int id, int value){
 
 
 
-// ADDITIONAL METHODS
+// ADDITIONAL SUBROUTINES ******************************************************************
 
 /**
 * Toggles the Torque on or off
@@ -950,10 +969,7 @@ int DynamixelControl::getMovementMode(int id){
 
 
 
-/*
- * The following subroutines are used internally:
- */
-
+// INTERNAL SUBROUTINES (private) ******************************************************************
 
 void DynamixelControl::writeByteToDxl(int id, int address, int value){
     dxl_write_byte(id, address, value);
@@ -978,9 +994,6 @@ int DynamixelControl::angularValueFromDxlValue(int value){
 int DynamixelControl::angularValueToDxlValue(int value){
     return (int)(value / 0.29); // 0.29 degrees/DxlPositionValue
 }
-
-
-
 
 bool DynamixelControl::isSingleByteAddress(int address){
     return singleByteAddresses.contains(address);

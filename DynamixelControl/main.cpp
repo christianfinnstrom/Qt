@@ -12,7 +12,9 @@ int main(int argc, char *argv[])
 
     com.initialize();
 
-    com.setGoalPosition(4, 720);
+    com.setGoalPosition(4, 1000);
+
+    QDebug >> com.getBaudrate(4);
 
     com.terminate();
 

@@ -12,11 +12,14 @@ TARGET = DynamixelControl
 CONFIG   += console
 CONFIG   -= app_bundle
 
-LIBS += -LC:\Qt\Tools\QtCreator\bin\DynamixelControl -ldynamixel
+# Make sure this path points to the lib-file directory (DynamixelControl folder)
+# Example: LIBS += -L"path" -ldynamixel, eg. change "path" to DynamixelControl folder destination
+LIBS += -LC:\Users\Christian\Documents\GitHub\Qt\DynamixelControl -ldynamixel
 
 TEMPLATE = app
 
-INCLUDEPATH += C:\Qt\Tools\QtCreator\bin\DynamixelControl
+# make sure this path is correct. It must lead to the DynamixelControl folder.
+INCLUDEPATH += C:\Users\Christian\Documents\GitHub\Qt\DynamixelControl
 
 SOURCES += main.cpp \
     DynamixelControl.cpp
