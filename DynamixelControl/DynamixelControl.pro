@@ -18,17 +18,20 @@ LIBS += -LC:\Users\Christian\Documents\GitHub\Qt\DynamixelControl -ldynamixel
 
 TEMPLATE = app
 
-# make sure this path is correct. It must lead to the DynamixelControl folder.
+# make sure this path is correct. It must lead to the DynamixelControl folder where the headers are.
 INCLUDEPATH += C:\Users\Christian\Documents\GitHub\Qt\DynamixelControl
 
 SOURCES += main.cpp \
-    DynamixelControl.cpp
+    sensorcontrol.cpp \
+    actuatorcontrol.cpp
 
 OTHER_FILES += \
     dynamixel.lib \
+    dynamixel.def \
     DynamixelControl32.dll \
-    dynamixel.def
+    DynamixelControl.pro.user
 
 HEADERS += \
     dynamixel_control.h \
-    DynamixelControl.h
+    sensorcontrol.h \
+    actuatorcontrol.h

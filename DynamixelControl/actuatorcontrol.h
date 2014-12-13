@@ -8,7 +8,7 @@
 
 
 
-class DynamixelControl
+class ActuatorControl
 {
 public:
 
@@ -73,6 +73,7 @@ public:
     static void torqueEnableSwitch(int id);
     static bool isInstructionRegistered(int id);
     static bool isMoving(int id);
+    static int getPresentLoad(int id);
     static bool isEEPROMLocked(int id);
     static void toggleWheelMode(int id);
     static void toggleJointMode(int id, int newCWAngleLimit, int newCCWAngleLimit);
@@ -96,4 +97,4 @@ private:
 
 };
 
-#endif // DYNAMIXELCONTROL_H
+#endif // ACTUATORCONTROL_H

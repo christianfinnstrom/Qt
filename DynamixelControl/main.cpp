@@ -1,5 +1,6 @@
 #include <QCoreApplication>
-#include "DynamixelControl.h"
+#include "ActuatorControl.h"
+#include "sensorcontrol.h"
 #include <QDebug>
 
 
@@ -8,15 +9,20 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    DynamixelControl com;
+    //ActuatorControl com;
+    //com.initialize();
+    SensorControl sen;
+    sen.initialize();
 
-    com.initialize();
+    //com.setGoalPosition(4, 200);
+    qDebug() << sen.getIRLeftFireData(100);
 
-    com.setGoalPosition(4, 1000);
 
-    QDebug >> com.getBaudrate(4);
 
-    com.terminate();
+
+//        com.toggleJointMode(4,0
+
+    sen.terminate();
 
 
     return a.exec();

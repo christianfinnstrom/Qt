@@ -1,4 +1,4 @@
-#include "DynamixelControl.h"
+#include "ActuatorControl.h"
 #include "dynamixel_control.h"
 #include <QMap>
 #include <QList>
@@ -98,7 +98,7 @@ QList<int> singleByteAddresses = createSingleByteAddresses();
 * Attempts to initialize the communication devices
 * @return 1 if success, 0 if failure
 */
-int DynamixelControl::initialize(void){
+int ActuatorControl::initialize(void){
     return dxl_initialize(2,1);
 }
 
@@ -106,7 +106,7 @@ int DynamixelControl::initialize(void){
 /**
  * Terminates the communication devices
  */
-void DynamixelControl::terminate(){
+void ActuatorControl::terminate(){
     dxl_terminate();
 }
 
@@ -117,7 +117,7 @@ void DynamixelControl::terminate(){
 * @param address Memory address to read from (see Control Table)
 * @return Value at the memory address
 */
-int DynamixelControl::readFromDxl(int id, int address){
+int ActuatorControl::readFromDxl(int id, int address){
     if (isSingleByteAddress(address)) return readByteFromDxl(id, address);
     else return readWordFromDxl(id, address);
 }
@@ -130,7 +130,7 @@ int DynamixelControl::readFromDxl(int id, int address){
 * @param address Memory address to write to (see Control Table)
 * @param value Value to write
 */
-void DynamixelControl::writeToDxl(int id, int address, int value){
+void ActuatorControl::writeToDxl(int id, int address, int value){
     if (isSingleByteAddress(address)) return writeByteToDxl(id, address, value);
     else return writeWordToDxl(id, address, value);
 }
@@ -141,7 +141,7 @@ void DynamixelControl::writeToDxl(int id, int address, int value){
 * @param id Dynamixel actuator ID
 * @return Model number
 */
-int DynamixelControl::getModelNumber(int id){
+int ActuatorControl::getModelNumber(int id){
     return readFromDxl(id, controlTableDictionary["version of firmware"]);
 }
 
@@ -151,7 +151,7 @@ int DynamixelControl::getModelNumber(int id){
 * @param id Dynamixel actuator ID
 * @return Firmware version
 */
-int DynamixelControl::getVersionOfFirmware(int id){
+int ActuatorControl::getVersionOfFirmware(int id){
     return readFromDxl(id, controlTableDictionary["model number(l)"]);
 }
 
@@ -162,7 +162,7 @@ int DynamixelControl::getVersionOfFirmware(int id){
 * @param id Dynamixel actuator ID (to check)
 * @return Dynamixel actuator ID, range: 0-254
 */
-int DynamixelControl::getID(int id){
+int ActuatorControl::getID(int id){
     return readFromDxl(id, controlTableDictionary["id"]);
 }
 
@@ -173,7 +173,7 @@ int DynamixelControl::getID(int id){
 * @param id Dynamixel actuator ID
 * @param newID New ID value, range: 0-254
 */
-void DynamixelControl::setID(int id, int newID){
+void ActuatorControl::setID(int id, int newID){
     if (newID < 0) newID = 0;
     if (newID > 254) newID = 254;
     writeToDxl(id, controlTableDictionary["id"], newID);
@@ -186,7 +186,7 @@ void DynamixelControl::setID(int id, int newID){
 * @param id Dynamixel actuator ID
 * @return Baudrate, range: 0-254
 */
-int DynamixelControl::getBaudrate(int id){
+int ActuatorControl::getBaudrate(int id){
     return readFromDxl(id, controlTableDictionary["baud rate"]);
 }
 
@@ -198,7 +198,7 @@ int DynamixelControl::getBaudrate(int id){
 * @param id Dynamixel actuator ID
 * @param newBaud New baudrate value, range: 0-254
 */
-void DynamixelControl::setBaudrate(int id, int newBaud){
+void ActuatorControl::setBaudrate(int id, int newBaud){
     if (newBaud < 0) newBaud = 0;
     if (newBaud > 254) newBaud = 254;
     writeToDxl(id, controlTableDictionary["baud rate"], newBaud);
@@ -213,7 +213,7 @@ void DynamixelControl::setBaudrate(int id, int newBaud){
    * @param id Dynamixel actuator ID
    * @return Return Delay Time, range: 0-254
    */
-int DynamixelControl::getReturnDelayTime(int id){
+int ActuatorControl::getReturnDelayTime(int id){
     return readFromDxl(id, controlTableDictionary["return delay time"]);
 }
 
@@ -226,7 +226,7 @@ int DynamixelControl::getReturnDelayTime(int id){
     * @param id Dynamixel actuator ID
     * @param newReturnDelayTime New Return Delay Time value, range: 0-254
     */
-void DynamixelControl::setReturnDelayTime(int id, int newReturnDelayTime){
+void ActuatorControl::setReturnDelayTime(int id, int newReturnDelayTime){
     if (newReturnDelayTime < 0) newReturnDelayTime = 0;
     if (newReturnDelayTime > 254) newReturnDelayTime = 254;
     writeToDxl(id, controlTableDictionary["return delay time"], newReturnDelayTime);
@@ -239,7 +239,7 @@ void DynamixelControl::setReturnDelayTime(int id, int newReturnDelayTime){
 * @param id Dynamixel actuator ID
 * @return CW Angle Limit
 */
-int DynamixelControl::getCWAngleLimit(int id){
+int ActuatorControl::getCWAngleLimit(int id){
     return readFromDxl(id, controlTableDictionary["cw angle limit(l)"]);
 }
 
@@ -250,7 +250,7 @@ int DynamixelControl::getCWAngleLimit(int id){
 * @param id Dynamixel actuator ID
 * @param newCWAngleLimit New CW Angle Limit value
 */
-void DynamixelControl::setCWAngleLimit(int id, int newCWAngleLimit){
+void ActuatorControl::setCWAngleLimit(int id, int newCWAngleLimit){
     // Only checks if the input values are too low, values over 2047 may be used to enter Multi-turn Mode:
     if (newCWAngleLimit < 0) newCWAngleLimit = 0;
     writeToDxl(id, controlTableDictionary["cw angle limit(l)"], newCWAngleLimit);
@@ -263,7 +263,7 @@ void DynamixelControl::setCWAngleLimit(int id, int newCWAngleLimit){
 * @param id Dynamixel actuator ID
 * @return CCW Angle Limit
 */
-int DynamixelControl::getCCWAngleLimit(int id){
+int ActuatorControl::getCCWAngleLimit(int id){
     return readFromDxl(id, controlTableDictionary["ccw angle limit(l)"]);
 }
 
@@ -274,7 +274,7 @@ int DynamixelControl::getCCWAngleLimit(int id){
 * @param id Dynamixel actuator ID
 * @param newCCWAngleLimit New CCW Angle Limit value
 */
-void DynamixelControl::setCCWAngleLimit(int id, int newCCWAngleLimit){
+void ActuatorControl::setCCWAngleLimit(int id, int newCCWAngleLimit){
     // Only checks if the input values are too low, values over 2047 may be used to enter Multi-turn Mode:
     if (newCCWAngleLimit < 0) newCCWAngleLimit = 0;
     writeToDxl(id, controlTableDictionary["ccw angle limit(l)"], newCCWAngleLimit);
@@ -287,7 +287,7 @@ void DynamixelControl::setCCWAngleLimit(int id, int newCCWAngleLimit){
 * @param id Dynamixel actuator ID
 * @return Highest Limit Temperature
 */
-int DynamixelControl::getTheHighestLimitTemperature(int id){
+int ActuatorControl::getTheHighestLimitTemperature(int id){
     return readFromDxl(id, controlTableDictionary["the highest limit temperature"]);
 }
 
@@ -298,7 +298,7 @@ int DynamixelControl::getTheHighestLimitTemperature(int id){
 * @param id Dynamixel actuator ID
 * @param valu New Highest Limit Temperature value
 */
-void DynamixelControl::setTheHighestLimitTemperature(int id, int value){
+void ActuatorControl::setTheHighestLimitTemperature(int id, int value){
     writeToDxl(id, controlTableDictionary["the highest limit temperature"], value);
 }
 
@@ -311,7 +311,7 @@ void DynamixelControl::setTheHighestLimitTemperature(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Lowest Limit Voltage
 */
-int DynamixelControl::getTheLowestLimitVoltage(int id){
+int ActuatorControl::getTheLowestLimitVoltage(int id){
     return readFromDxl(id, controlTableDictionary["the lowest limit voltage"]);
 }
 
@@ -324,7 +324,7 @@ int DynamixelControl::getTheLowestLimitVoltage(int id){
 * @param id Dynamixel actuator ID
 * @param value New Lowest Limit Voltage value, range: 50-250
 */
-void DynamixelControl::setTheLowestLimitVoltage(int id, int value){
+void ActuatorControl::setTheLowestLimitVoltage(int id, int value){
     if (value < 50) value = 50;
     if (value > 250) value = 250;
     writeToDxl(id, controlTableDictionary["the lowest limit voltage"], value);
@@ -339,7 +339,7 @@ void DynamixelControl::setTheLowestLimitVoltage(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Highest Limit Voltage
 */
-int DynamixelControl::getTheHighestLimitVoltage(int id){
+int ActuatorControl::getTheHighestLimitVoltage(int id){
    return readFromDxl(id, controlTableDictionary["the highest limit voltage"]);
 }
 
@@ -352,7 +352,7 @@ int DynamixelControl::getTheHighestLimitVoltage(int id){
 * @param id Dynamixel actuator ID
 * @param value New Highest Limit Voltage value, range: 50-250
 */
-void DynamixelControl::setTheHighestLimitVoltage(int id, int value){
+void ActuatorControl::setTheHighestLimitVoltage(int id, int value){
     if (value < 50) value = 50;
     if (value > 250) value = 250;
     writeToDxl(id, controlTableDictionary["the highest limit voltage"], value);
@@ -366,7 +366,7 @@ void DynamixelControl::setTheHighestLimitVoltage(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Max Torque, range: 0-1023
 */
-int DynamixelControl::getMaxTorque(int id){
+int ActuatorControl::getMaxTorque(int id){
    return readFromDxl(id, controlTableDictionary["max torque(l)"]);
 }
 
@@ -378,7 +378,7 @@ int DynamixelControl::getMaxTorque(int id){
 * @param id Dynamixel actuator ID
 * @param value New Max Torque value, range: 0-1023
 */
-void DynamixelControl::setMaxTorque(int id, int value){
+void ActuatorControl::setMaxTorque(int id, int value){
    if (value < 0) value = 0;
    if (value > 1023) value = 1023;
    writeToDxl(id, controlTableDictionary["max torque(l)"], value);
@@ -394,7 +394,7 @@ void DynamixelControl::setMaxTorque(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Status Return Level, 0, 1 or 2
 */
-int DynamixelControl::getStatusReturnLevel(int id){
+int ActuatorControl::getStatusReturnLevel(int id){
     return readFromDxl(id, controlTableDictionary["status return level"]);
 }
 
@@ -408,7 +408,7 @@ int DynamixelControl::getStatusReturnLevel(int id){
 * @param id Dynamixel actuator ID
 * @param value New Status Return Level value, 0, 1 or 2
 */
-void DynamixelControl::setStatusReturnLevel(int id, int value){
+void ActuatorControl::setStatusReturnLevel(int id, int value){
     if (value < 0 || value > 3) return;
     else writeToDxl(id, controlTableDictionary["status return level"], value);
 }
@@ -419,7 +419,7 @@ void DynamixelControl::setStatusReturnLevel(int id, int value){
 * @param id Dynamixel actuator ID
 * @return 0 if off, 1 else
 */
-int DynamixelControl::getAlarmLED(int id){
+int ActuatorControl::getAlarmLED(int id){
     return readFromDxl(id, controlTableDictionary["alarm led"]);
 }
 
@@ -430,7 +430,7 @@ int DynamixelControl::getAlarmLED(int id){
 * @param id Dynamixel actuator ID
 * @param value New Alarm LED status value, 0 or 1
 */
-void DynamixelControl::setAlarmLED(int id, int value){
+void ActuatorControl::setAlarmLED(int id, int value){
     if (value != 0 || value != 1) return;
     else writeToDxl(id, controlTableDictionary["alarm led"], value);
 }
@@ -456,7 +456,7 @@ void DynamixelControl::setAlarmLED(int id, int value){
 * @param id Dynamixel actuator ID
 * @return See description
 */
-int DynamixelControl::getAlarmShutdown(int id){
+int ActuatorControl::getAlarmShutdown(int id){
     return readFromDxl(id, controlTableDictionary["alarm shutdown"]);
 }
 
@@ -481,7 +481,7 @@ int DynamixelControl::getAlarmShutdown(int id){
 * @param id Dynamixel actuator ID
 * @param value New Alarm Shutdown value (see description)
 */
-void DynamixelControl::setAlarmShutdown(int id, int value){
+void ActuatorControl::setAlarmShutdown(int id, int value){
     writeToDxl(id, controlTableDictionary["alarm shutdown"], value);
 }
 
@@ -491,7 +491,7 @@ void DynamixelControl::setAlarmShutdown(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Off: 0, on: 1
 */
-int DynamixelControl::getTorqueEnable(int id){
+int ActuatorControl::getTorqueEnable(int id){
     return readFromDxl(id, controlTableDictionary["torque enable"]);
 }
 
@@ -501,7 +501,7 @@ int DynamixelControl::getTorqueEnable(int id){
 * @param id Dynamixel actuator ID
 * @param value Off: 0, on: 1
 */
-void DynamixelControl::setTorqueEnable(int id, int value){
+void ActuatorControl::setTorqueEnable(int id, int value){
     if (value != 0 || value != 1) return;
     else writeToDxl(id, controlTableDictionary["torque enable"], value);
 }
@@ -513,7 +513,7 @@ void DynamixelControl::setTorqueEnable(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Bit 2: BLUE LED, Bit 1: GREEN, Bit 0: RED LED
 */
-int DynamixelControl::getLED(int id){
+int ActuatorControl::getLED(int id){
     return readFromDxl(id, controlTableDictionary["led"]);
 }
 
@@ -524,7 +524,7 @@ int DynamixelControl::getLED(int id){
 * @param id Dynamixel actuator ID
 * @param value Bit 2: BLUE LED, Bit 1: GREEN, Bit 0: RED LED
 */
-void DynamixelControl::setLED(int id, int value){
+void ActuatorControl::setLED(int id, int value){
     writeToDxl(id, controlTableDictionary["led"], value);
 }
 
@@ -535,7 +535,7 @@ void DynamixelControl::setLED(int id, int value){
 * @param id Dynamixel actuator ID
 * @return CW Compliance Margin, range: 0-255
 */
-int DynamixelControl::getCWComplianceMargin(int id){
+int ActuatorControl::getCWComplianceMargin(int id){
     return readFromDxl(id, controlTableDictionary["cw compliance margin"]);
 }
 
@@ -546,7 +546,7 @@ int DynamixelControl::getCWComplianceMargin(int id){
 * @param id Dynamixel actuator ID
 * @param value New CW Compliance Margin value, range: 0-255
 */
-void DynamixelControl::setCWComplianceMargin(int id, int value){
+void ActuatorControl::setCWComplianceMargin(int id, int value){
     if (value < 0) value = 0;
     if (value > 255) value = 255;
     writeToDxl(id, controlTableDictionary["cw compliance margin"], value);
@@ -559,7 +559,7 @@ void DynamixelControl::setCWComplianceMargin(int id, int value){
 * @param id Dynamixel actuator ID
 * @return CCW Compliance Margin, range: 0-255
 */
-int DynamixelControl::getCCWComplianceMargin(int id){
+int ActuatorControl::getCCWComplianceMargin(int id){
     return readFromDxl(id, controlTableDictionary["ccw compliance margin"]);
 }
 
@@ -570,7 +570,7 @@ int DynamixelControl::getCCWComplianceMargin(int id){
 * @param id Dynamixel actuator ID
 * @param value New CCW Compliance Margin value, range: 0-255
 */
-void DynamixelControl::setCCWComplianceMargin(int id, int value){
+void ActuatorControl::setCCWComplianceMargin(int id, int value){
     if (value < 0) value = 0;
     if (value > 255) value = 255;
     writeToDxl(id, controlTableDictionary["ccw compliance margin"], value);
@@ -587,7 +587,7 @@ void DynamixelControl::setCCWComplianceMargin(int id, int value){
 * @param id Dynamixel actuator ID
 * @return CW Compliance Slope (see description)
 */
-int DynamixelControl::getCWComplianceSlope(int id){
+int ActuatorControl::getCWComplianceSlope(int id){
     return readFromDxl(id, controlTableDictionary["cw compliance slope"]);
 }
 
@@ -600,7 +600,7 @@ int DynamixelControl::getCWComplianceSlope(int id){
 * @param id Dynamixel actuator ID
 * @param value New CW Compliance Slope value (2, 4, 8, 16, 32, 64, 128)
 */
-void DynamixelControl::setCWComplianceSlope(int id, int value){
+void ActuatorControl::setCWComplianceSlope(int id, int value){
     if (value < 0) value = 0;
     if (value > 255) value = 254;
     writeToDxl(id, controlTableDictionary["cw compliance slope"], value);
@@ -616,7 +616,7 @@ void DynamixelControl::setCWComplianceSlope(int id, int value){
 * @param id Dynamixel actuator ID
 * @return CCW Compliance Slope (see description)
 */
-int DynamixelControl::getCCWComplianceSlope(int id){
+int ActuatorControl::getCCWComplianceSlope(int id){
     return readFromDxl(id, controlTableDictionary["ccw compliance slope"]);
 }
 
@@ -630,7 +630,7 @@ int DynamixelControl::getCCWComplianceSlope(int id){
 * @param id Dynamixel actuator ID
 * @param value New CCW Compliance Slope value (2, 4, 8, 16, 32, 64, 128)
 */
-void DynamixelControl::setCCWComplianceSlope(int id, int value){
+void ActuatorControl::setCCWComplianceSlope(int id, int value){
    if (value < 0) value = 0;
    if (value > 255) value = 254;
    writeToDxl(id, controlTableDictionary["ccw compliance slope"], value);
@@ -647,7 +647,7 @@ void DynamixelControl::setCCWComplianceSlope(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Goal Position, range: 0-1023
 */
-int DynamixelControl::getGoalPosition(int id){
+int ActuatorControl::getGoalPosition(int id){
     return readFromDxl(id, controlTableDictionary["goal position(l)"]);
 }
 
@@ -660,7 +660,7 @@ int DynamixelControl::getGoalPosition(int id){
 * @param id Dynamixel actuator ID
 * <param value New Goal Position value, range: 0-1023
 */
-void DynamixelControl::setGoalPosition(int id, int value){
+void ActuatorControl::setGoalPosition(int id, int value){
     if (value < 0) value = 0;
     if (value > 1023) value = 1023;
     writeToDxl(id, controlTableDictionary["goal position(l)"], value);
@@ -676,7 +676,7 @@ void DynamixelControl::setGoalPosition(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Moving Speed (see description)
 */
-int DynamixelControl::getMovingSpeed(int id){
+int ActuatorControl::getMovingSpeed(int id){
     return readFromDxl(id, controlTableDictionary["moving speed(l)"]);
 }
 
@@ -690,7 +690,7 @@ int DynamixelControl::getMovingSpeed(int id){
 * @param id Dynamixel actuator ID
 * <param value New Moving Speed value (see description)
 */
-void DynamixelControl::setMovingSpeed(int id, int value){
+void ActuatorControl::setMovingSpeed(int id, int value){
     if (value < 0) value = 0;
     else{
         if (getMovementMode(id) == 0){ // WHEEL MODE
@@ -710,7 +710,7 @@ void DynamixelControl::setMovingSpeed(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Torque Limit
 */
-int DynamixelControl::getTorqueLimit(int id){
+int ActuatorControl::getTorqueLimit(int id){
     return readFromDxl(id, controlTableDictionary["torque limit(l)"]);
 }
 
@@ -721,7 +721,7 @@ int DynamixelControl::getTorqueLimit(int id){
 * @param id Dynamixel actuator ID
 * <param value New Torque Limit value, range: 0-1023
 */
-void DynamixelControl::setTorqueLimit(int id, int value){
+void ActuatorControl::setTorqueLimit(int id, int value){
     if (value < 0) value = 0;
     if (value > 1023) value = 1023;
     writeToDxl(id, controlTableDictionary["torque limit(l)"], value);
@@ -734,7 +734,7 @@ void DynamixelControl::setTorqueLimit(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Present Position
 */
-int DynamixelControl::getPresentPosition(int id){
+int ActuatorControl::getPresentPosition(int id){
     return readFromDxl(id, controlTableDictionary["present position(l)"]);
 }
 
@@ -746,7 +746,7 @@ int DynamixelControl::getPresentPosition(int id){
 * @param id Dynamixel actuator ID
 * @return Present Speed (see description)
 */
-int DynamixelControl::getPresentSpeed(int id){
+int ActuatorControl::getPresentSpeed(int id){
     return readFromDxl(id, controlTableDictionary["present speed(l)"]);
 }
 
@@ -758,7 +758,7 @@ int DynamixelControl::getPresentSpeed(int id){
 * @param id Dynamixel actuator ID
 * @return Present Load
 */
-int DynamixelControl::getPresentLoad(int id){
+int ActuatorControl::getPresentLoad(int id){
     return readFromDxl(id, controlTableDictionary["present load(l)"]);
 }
 
@@ -770,7 +770,7 @@ int DynamixelControl::getPresentLoad(int id){
 * @param id Dynamixel actuator ID
 * @return Present Load
 */
-int DynamixelControl::getPresentVoltage(int id){
+int ActuatorControl::getPresentVoltage(int id){
     return readFromDxl(id, controlTableDictionary["present "]);
 }
 
@@ -782,7 +782,7 @@ int DynamixelControl::getPresentVoltage(int id){
 * @param id Dynamixel actuator ID
 * @return Present Temperature
 */
-int DynamixelControl::getPresentTemperature(int id){
+int ActuatorControl::getPresentTemperature(int id){
     return readFromDxl(id, controlTableDictionary["present temperature"]);
 }
 
@@ -792,7 +792,7 @@ int DynamixelControl::getPresentTemperature(int id){
 * @param id Dynamixel actuator ID
 * @return False: 0, true: 1
 */
-int DynamixelControl::getRegistered(int id){
+int ActuatorControl::getRegistered(int id){
     return readFromDxl(id, controlTableDictionary["registered"]);
 }
 
@@ -802,7 +802,7 @@ int DynamixelControl::getRegistered(int id){
 * @param id Dynamixel actuator ID
 * @return False: 0, true: 1
 */
-int DynamixelControl::getMoving(int id){
+int ActuatorControl::getMoving(int id){
     return readFromDxl(id, controlTableDictionary["moving"]);
 }
 
@@ -813,7 +813,7 @@ int DynamixelControl::getMoving(int id){
 * @param id Dynamixel actuator ID
 * @return False: 0, true: 1
 */
-int DynamixelControl::getLock(int id){
+int ActuatorControl::getLock(int id){
     return readFromDxl(id, controlTableDictionary["lock"]);
 }
 
@@ -824,7 +824,7 @@ int DynamixelControl::getLock(int id){
 * @param id Dynamixel actuator ID
 * @param value Lock: 1, unlock: 0
 */
-void DynamixelControl::setLock(int id, int value){
+void ActuatorControl::setLock(int id, int value){
     if (value != 0 || value != 1) return;
     else writeToDxl(id, controlTableDictionary["lock"], value);
 }
@@ -838,7 +838,7 @@ void DynamixelControl::setLock(int id, int value){
 * @param id Dynamixel actuator ID
 * @return Punch
 */
-int DynamixelControl::getPunch(int id){
+int ActuatorControl::getPunch(int id){
     return readFromDxl(id, controlTableDictionary["punch(l)"]);
 }
 
@@ -851,7 +851,7 @@ int DynamixelControl::getPunch(int id){
 * @param id
 * @param value New Punch value, range: 32-1023
 */
-void DynamixelControl::setPunch(int id, int value){
+void ActuatorControl::setPunch(int id, int value){
     if (value < 32) value = 32;
     if (value > 1023) value = 1023;
     writeToDxl(id, controlTableDictionary["punch(l)"], value);
@@ -865,7 +865,7 @@ void DynamixelControl::setPunch(int id, int value){
 * Toggles the Torque on or off
 * @param id Dynamixel actuator ID
 */
-void DynamixelControl::torqueEnableSwitch(int id){
+void ActuatorControl::torqueEnableSwitch(int id){
     int status = getTorqueEnable(id);
     if (status > 0) setTorqueEnable(id, 0); // if on, turn off
     else setTorqueEnable(id, 1); // if off, turn on
@@ -877,7 +877,7 @@ void DynamixelControl::torqueEnableSwitch(int id){
 * @param id Dynamixel actuator ID
 * @return true/false
 */
-bool DynamixelControl::isInstructionRegistered(int id){
+bool ActuatorControl::isInstructionRegistered(int id){
     return (getRegistered(id) > 0 ? true : false);
 }
 
@@ -887,7 +887,7 @@ bool DynamixelControl::isInstructionRegistered(int id){
 * @param  actuator ID
 * @return true/false
 */
-bool DynamixelControl::isMoving(int id){
+bool ActuatorControl::isMoving(int id){
     return (getMoving(id) > 0 ? true : false);
 }
 
@@ -898,7 +898,7 @@ bool DynamixelControl::isMoving(int id){
 * @param id
 * @return true/false
 */
-bool DynamixelControl::isEEPROMLocked(int id){
+bool ActuatorControl::isEEPROMLocked(int id){
     return (getLock(id) > 0 ? true : false);
 }
 
@@ -908,7 +908,7 @@ bool DynamixelControl::isEEPROMLocked(int id){
 * WHEEL MODE: The actuator rotates 360 degrees like a regular motor
 * @param id
 */
-void DynamixelControl::toggleWheelMode(int id){
+void ActuatorControl::toggleWheelMode(int id){
     setCWAngleLimit(id, 0);
     setCCWAngleLimit(id, 0);
 }
@@ -921,7 +921,7 @@ void DynamixelControl::toggleWheelMode(int id){
 * @param newCWAngleLimit New CW Angle Limit
 * @param newCCWAngleLimit New CCW Angle Limit
 */
-void DynamixelControl::toggleJointMode(int id, int newCWAngleLimit, int newCCWAngleLimit){
+void ActuatorControl::toggleJointMode(int id, int newCWAngleLimit, int newCCWAngleLimit){
     setCWAngleLimit(id, newCWAngleLimit);
     setCCWAngleLimit(id, newCCWAngleLimit);
 }
@@ -932,7 +932,7 @@ void DynamixelControl::toggleJointMode(int id, int newCWAngleLimit, int newCCWAn
 * @param id Dynamixel actuator ID
 * @return Angular goal position value
 */
-int DynamixelControl::getGoalPositionAngular(int id){
+int ActuatorControl::getGoalPositionAngular(int id){
     return angularValueFromDxlValue(getGoalPosition(id));
 }
 
@@ -942,7 +942,7 @@ int DynamixelControl::getGoalPositionAngular(int id){
 * @param id Dynamixel actuator ID
 * @param angularPosition Angular goal position value
 */
-void DynamixelControl::setGoalPositionAngular(int id, int angularPosition){
+void ActuatorControl::setGoalPositionAngular(int id, int angularPosition){
     setGoalPosition(id, angularValueToDxlValue(angularPosition));
 }
 
@@ -952,7 +952,7 @@ void DynamixelControl::setGoalPositionAngular(int id, int angularPosition){
 * @param id Dynamixel actuator ID
 * @return Position as angular value
 */
-int DynamixelControl::getPresentPositionAngular(int id){
+int ActuatorControl::getPresentPositionAngular(int id){
     return angularValueFromDxlValue(getPresentPosition(id));
 }
 
@@ -962,7 +962,7 @@ int DynamixelControl::getPresentPositionAngular(int id){
 * @param id Dynamixel actuator ID
 * @return WHEEL MDOE: 0, JOINT MODE: 1
 */
-int DynamixelControl::getMovementMode(int id){
+int ActuatorControl::getMovementMode(int id){
     if (getCWAngleLimit(id) == 0 && getCCWAngleLimit(id) == 0) return 0; // WHEEL MODE
     else return 1; // JOINT MODE
 }
@@ -971,31 +971,31 @@ int DynamixelControl::getMovementMode(int id){
 
 // INTERNAL SUBROUTINES (private) ******************************************************************
 
-void DynamixelControl::writeByteToDxl(int id, int address, int value){
+void ActuatorControl::writeByteToDxl(int id, int address, int value){
     dxl_write_byte(id, address, value);
 }
 
-void DynamixelControl::writeWordToDxl(int id, int address, int value){
+void ActuatorControl::writeWordToDxl(int id, int address, int value){
     dxl_write_word(id, address, value);
 }
 
-int DynamixelControl::readByteFromDxl(int id, int address){
+int ActuatorControl::readByteFromDxl(int id, int address){
     return dxl_read_byte(id, address);
 }
 
-int DynamixelControl::readWordFromDxl(int id, int address){
+int ActuatorControl::readWordFromDxl(int id, int address){
     return dxl_read_word(id, address);
 }
 
-int DynamixelControl::angularValueFromDxlValue(int value){
+int ActuatorControl::angularValueFromDxlValue(int value){
     return (int)(value * 0.29); // 0.29 degrees*DxlPositionValue
 }
 
-int DynamixelControl::angularValueToDxlValue(int value){
+int ActuatorControl::angularValueToDxlValue(int value){
     return (int)(value / 0.29); // 0.29 degrees/DxlPositionValue
 }
 
-bool DynamixelControl::isSingleByteAddress(int address){
+bool ActuatorControl::isSingleByteAddress(int address){
     return singleByteAddresses.contains(address);
 }
 
